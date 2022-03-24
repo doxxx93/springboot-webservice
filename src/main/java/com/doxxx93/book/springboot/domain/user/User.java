@@ -1,7 +1,6 @@
 package com.doxxx93.book.springboot.domain.user;
 
 import com.doxxx93.book.springboot.domain.BaseTimeEntity;
-import javax.management.relation.Role;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
