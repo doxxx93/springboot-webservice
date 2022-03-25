@@ -1,9 +1,9 @@
 package com.doxxx93.book.springboot.web;
 
+import com.doxxx93.book.springboot.config.auth.LoginUser;
 import com.doxxx93.book.springboot.config.auth.dto.SessionUser;
 import com.doxxx93.book.springboot.service.posts.PostsService;
 import com.doxxx93.book.springboot.web.dto.PostsResponseDto;
-import javax.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -15,12 +15,10 @@ import org.springframework.web.bind.annotation.PathVariable;
 public class IndexController {
 
     private final PostsService postsService;
-    private final HttpSession httpSession;
 
     @GetMapping("/")
-    public String index(Model model) {
+    public String index(Model model, @LoginUser SessionUser user) {
         model.addAttribute("posts", postsService.findAllDesc());
-        SessionUser user = (SessionUser) httpSession.getAttribute("user");
         if (user != null) {
             model.addAttribute("userName", user.getName());
         }
@@ -28,14 +26,15 @@ public class IndexController {
     }
 
     @GetMapping("/posts/save")
-    public String postsSave() {
+    public String postsSave(){
         return "posts-save";
     }
 
     @GetMapping("/posts/update/{id}")
-    public String postsUpdate(@PathVariable Long id, Model model) {
-        PostsResponseDto dto =  postsService.findById(id);
+    public String postsUpdate(@PathVariable Long id, Model model){
+        PostsResponseDto dto = postsService.findById(id);
         model.addAttribute("post", dto);
+
         return "posts-update";
     }
 }
